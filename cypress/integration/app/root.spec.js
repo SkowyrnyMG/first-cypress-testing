@@ -18,4 +18,11 @@ describe('Main app functionality', () => {
    cy.get('input').type('Cypress is fun!')
    cy.get('button').contains('add').click();
   })
+
+  it('Should delete tasks after clicking delete button', () => {
+    cy.get('button').contains(/delete/i).click();
+    cy.get('button').contains(/delete/i).click();
+    cy.get('button').contains(/delete/i).click();
+    cy.get('button').contains(/delete/i).click();
+  })
 })

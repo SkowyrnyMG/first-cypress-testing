@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import Task from './task';
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -43,7 +45,7 @@ const TaskSubmitButton = styled.button`
   cursor: pointer;
 
   :hover {
-    background-color: lightskyblue ;
+    background-color: lightskyblue;
     color: #fff;
   }
 `;
@@ -54,19 +56,21 @@ function App() {
   const [tasks, setTasks] = React.useState([]);
   const [taskInput, setTaskInput] = React.useState('');
 
-  // const handleClickAdd = (e) => {
-  //   e.preventDefault();
-  //   setTasks(prevState => ([...prevState, ]))
-  // }
+    const createUniqueID = () => {
+      const baseID = Math.floor((Math.random() * 1000000) + 1)
+      const dateModifier = Date.now();
+      const uniqueID = `${baseID}-${dateModifier}`;
+      return uniqueID
+    }
 
-  const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
     e.preventDefault();
     if(tasks.includes(taskInput)) {
       setTaskInput('');
       return;
     }
     if(taskInput) {
-      setTasks(prevState => ([...prevState, taskInput]));
+      setTasks(prevState => ([...prevState, {value: taskInput, id: createUniqueID()}]));
     }
     setTaskInput('');
   }
@@ -74,6 +78,13 @@ function App() {
   const handleTypeInTaskInput = (e) => {
     setTaskInput(e.target.value);
   }
+
+  const deleteSelectedTask = (e) => {
+   console.log(e.target.parentNode.id);
+   const selectedNodeByID = e.target.parentNode.id;
+   setTasks(prevState => prevState.filter(task => task.id !== selectedNodeByID))
+  }
+
 
   return (
     <Wrapper>
@@ -85,7 +96,7 @@ function App() {
         </StyledForm>
         <div>
           {
-            tasks.map(task => <p key={task}>{task}</p>)
+            tasks.map(task => <Task key={task.id} id={task.id} handleDeleteClick={deleteSelectedTask}>{task.value}</Task>)
           }
         </div>
       </AppContainer>
