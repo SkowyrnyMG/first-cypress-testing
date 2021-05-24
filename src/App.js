@@ -1,16 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Task from './task';
+import { HistoryContext, TasksContext } from './context/dataContext';
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-height: 100vh;
-  background: #efefef;
-`;
+import Layout from './components/utils/layout'
+import Task from './task';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -53,8 +47,9 @@ const TaskSubmitButton = styled.button`
 
 
 function App() {
-  const [tasks, setTasks] = React.useState([]);
   const [taskInput, setTaskInput] = React.useState('');
+  const {tasks, setTasks} = React.useContext(TasksContext);
+  const { setHistoryData } = React.useContext(HistoryContext);
 
     const createUniqueID = () => {
       const baseID = Math.floor((Math.random() * 1000000) + 1)
@@ -80,27 +75,32 @@ function App() {
   }
 
   const deleteSelectedTask = (e) => {
-   console.log(e.target.parentNode.id);
-   const selectedNodeByID = e.target.parentNode.id;
-   setTasks(prevState => prevState.filter(task => task.id !== selectedNodeByID))
+    console.log(e.target.parentNode.id);
+    const selectedNodeByID = e.target.parentNode.id;
+    tasks.forEach(task => {
+      if(task.id === selectedNodeByID) {
+        setHistoryData(prevState => [...prevState, task])
+      }
+    })
+    setTasks(prevState => prevState.filter(task => task.id !== selectedNodeByID))
   }
 
 
   return (
-    <Wrapper>
-      <AppContainer>
-        <MainHeading>todos</MainHeading>
-        <StyledForm action="submit" onSubmit={handleSubmit}>
-          <TaskInput type="text" onChange={handleTypeInTaskInput} value={taskInput}/>
-          <TaskSubmitButton type='submit'>add</TaskSubmitButton>
-        </StyledForm>
-        <div>
-          {
-            tasks.map(task => <Task key={task.id} id={task.id} handleDeleteClick={deleteSelectedTask}>{task.value}</Task>)
-          }
-        </div>
-      </AppContainer>
-    </Wrapper>
+      <Layout>
+        <AppContainer>
+          <MainHeading>todos</MainHeading>
+          <StyledForm action="submit" onSubmit={handleSubmit}>
+            <TaskInput type="text" onChange={handleTypeInTaskInput} value={taskInput}/>
+            <TaskSubmitButton type='submit'>add</TaskSubmitButton>
+          </StyledForm>
+          <div>
+            {
+              tasks.map(task => <Task key={task.id} id={task.id} handleDeleteClick={deleteSelectedTask}>{task.value}</Task>)
+            }
+          </div>
+        </AppContainer>
+      </Layout>
   );
 }
 

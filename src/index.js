@@ -1,13 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import App from './App';
+import HistoryPage from './views/history';
 import { GlobalStyles } from './global-styles';
+import {DataProvider} from './context/dataContext'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyles/>
-      <App />
+    <DataProvider>
+      <GlobalStyles/>
+      <Router>
+        <Switch>
+          <Route exact path='/'>
+            <App />
+          </Route>
+          <Route path='/history'>
+            <HistoryPage />
+          </Route>
+        </Switch>
+      </Router>
+    </DataProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
