@@ -25,4 +25,21 @@ describe('Main app functionality', () => {
     cy.get('button').contains(/delete/i).click();
     cy.get('button').contains(/delete/i).click();
   })
+
+  it('Should submit the task from after hitting enter key', () => {
+    cy.get('input').type('The form is submited by hiting Enter key! {enter}')
+  })
+
+  it('Should change location after using nav links', () => {
+    cy.get('nav').within(() => cy.contains(/history/i)).click();
+    cy.location().should((location) => expect(location.pathname).to.eq('/history'))
+  })
+
+  it('Should save deleted tasks in history', () => {
+   cy.get('p').should('contain', 'it works!')
+   cy.get('p').should('contain', 'list is growing!')
+   cy.get('p').should('contain', 'and growing!')
+   cy.get('p').should('contain', 'Cypress is fun!')
+
+  })
 })
