@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 
 describe('Main app functionality', () => {
   it('Should display main page', () => {
@@ -6,7 +7,7 @@ describe('Main app functionality', () => {
   })
 
   it('Should add new items to the todo list', () => {
-   cy.get('input').type('it works!')
+   cy.get('input').type('it works!');
    cy.get('button').contains('add').click();
 
    cy.get('input').type('list is growing!')
@@ -35,11 +36,19 @@ describe('Main app functionality', () => {
     cy.location().should((location) => expect(location.pathname).to.eq('/history'))
   })
 
-  it('Should save deleted tasks in history', () => {
-   cy.get('p').should('contain', 'it works!')
-   cy.get('p').should('contain', 'list is growing!')
-   cy.get('p').should('contain', 'and growing!')
-   cy.get('p').should('contain', 'Cypress is fun!')
 
+  it('Should save deleted tasks in history', () => {
+    cy.get('h2[data-testid="title"]').should('have.text', 'History of tasks')
+      .and('be.visible');
+    cy.get('p').should('contain', 'it works!')
+    cy.get('p').should('contain', 'list is growing!')
+    cy.get('p').should('contain', 'and growing!')
+    cy.get('p').should('contain', 'Cypress is fun!')
+
+  })
+
+  it('Should visit app urls after using nav links', () => {
+    cy.get('a').contains('Home').click();
+    cy.url().should('eq', 'http://localhost:3000/');
   })
 })
