@@ -10,7 +10,7 @@ const HistoryPage = () => {
   const { historyData } = React.useContext(HistoryContext);
   return (
       <Layout>
-        <h2>history works</h2>
+        <h2 data-testid='title'>History of tasks</h2>
         {
           historyData?.map(pos => <CompletedTask key={pos?.id}>{pos?.value}</CompletedTask>)
         }
